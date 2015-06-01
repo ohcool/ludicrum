@@ -64,5 +64,16 @@ module.exports.routes = {
   '/api/info': {
     controller: 'InfoController',
     action: 'index'
+  },
+
+  // File Management Endpoints
+  'get /api/file/download/:filename': {
+    controller: 'FileTestApiController',
+    action: 'download'
+  },
+
+  'get /api/file/stream/:filename': {
+    controller: 'FileTestApiController',
+    action: 'stream'
   }
 };
