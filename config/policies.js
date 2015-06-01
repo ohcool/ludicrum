@@ -48,9 +48,4 @@ module.exports.policies = {
 		// before letting any users feed our rabbits
 		// feed : ['isNiceToAnimals', 'hasRabbitFood']
 	// }
-  '*': true,
-
-  InfoController: {
-    'index': 'oauthBearer'
-  }
 };
