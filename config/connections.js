@@ -32,6 +32,50 @@ module.exports.connections = {
     adapter: 'sails-disk'
   },
 
+  development: {
+    adapter: "sails-orientdb",
+    host: 'localhost',
+    port: 2424,
+    user: 'dev',
+    password: 'pass@word88',
+    database: 'ludicrum',
+    // Additional options
+    options: {
+
+      // DB/Oriento Options
+      //
+      // database type: graph | document
+      databaseType: 'graph',
+      //
+      // storage type: memory | plocal
+      storage: 'plocal',
+
+      // Useful in REST APIs
+      //
+      // If `id` is URI encoded, decode it with `decodeURIComponent()` (useful when `id` comes from an URL)
+      decodeURIComponent: true,
+      //
+      // Replaces circular references with `id` after populate operations (useful when results will be JSONfied)
+      removeCircularReferences: false,
+
+      // migrations
+      //
+      // Drop tables without deleting edges/vertexes hence not ensuring graph consistency
+      // Will speed up drop operations. Only works with migration: 'alter' or 'drop'
+      unsafeDrop: false,
+
+      // other
+      //
+      // Turn parameterized queries on
+      parameterized: true,
+
+      //
+      // Waterline only allows populating 1 level below. fetchPlanLevel allows to
+      // to populate further levels below (experimental)
+      fetchPlanLevel: 1
+    }
+  },
+
   /***************************************************************************
   *                                                                          *
   * MySQL is the world's most popular relational database.                   *
@@ -56,13 +100,13 @@ module.exports.connections = {
   * Run: npm install sails-mongo                                             *
   *                                                                          *
   ***************************************************************************/
-  someMongodbServer: {
+  localMongoDbServer: {
     adapter: 'sails-mongo',
     host: 'localhost',
     port: 27017,
     // user: 'username',
     // password: 'password',
-    // database: 'your_mongo_db_name_here'
+    database: 'ludicrum'
   },
 
   /***************************************************************************

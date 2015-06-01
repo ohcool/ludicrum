@@ -31,10 +31,9 @@ module.exports.routes = {
   * `assets` directory)                                                      *
   *                                                                          *
   ***************************************************************************/
-
   '/': {
-    view: 'homepage'
-  }
+    view: 'index'
+  },
 
   /***************************************************************************
   *                                                                          *
@@ -45,5 +44,36 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
+// Client authorization endPoints
 
+
+  'get /login': {
+    view: 'login'
+  },
+  'post /login': {
+    controller: 'Auth',
+    action: 'login'
+  },
+  'get /logout': {
+    controller: 'Auth',
+    action: 'logout'
+  },
+
+  // Resources endPoints
+
+  '/api/info': {
+    controller: 'InfoController',
+    action: 'index'
+  },
+
+  // File Management Endpoints
+  'get /api/file/download/:filename': {
+    controller: 'FileTestApiController',
+    action: 'download'
+  },
+
+  'get /api/file/stream/:filename': {
+    controller: 'FileTestApiController',
+    action: 'stream'
+  }
 };
