@@ -68,12 +68,12 @@ module.exports.routes = {
 
   // File Management Endpoints
   'get /api/file/download/:filename': {
-    controller: 'FileTestApiController',
+    controller: 'FileController',
     action: 'download'
   },
 
   'get /api/file/stream/:filename': {
-    controller: 'FileTestApiController',
+    controller: 'FileController',
     action: 'stream'
   }
 };
