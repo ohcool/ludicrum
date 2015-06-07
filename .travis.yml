@@ -1,0 +1,8 @@
+language: node_js
+node_js:
+  - '0.12.3'
+before_install:
+  - npm install -g npm@latest
+addons:
+  code_climate:
+    repo_token: 26092b8a5d8d908cd0f0e3bce8f05f2169006dc42c8a76ae42c3c8f2620d0d88
