@@ -25,6 +25,7 @@ module.exports = {
     var filename = req.param('filename');
     var readOptions = {filename: filename};
 
+    //Retrieve file metadata information and then serve the file
     Files.findOne(readOptions)
       .then((file, err)=> {
 
