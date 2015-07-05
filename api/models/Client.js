@@ -1,8 +1,7 @@
 /**
  * Client
  *
- * @module      :: Model
- * @description :: A short summary of how this model works and what it represents.
+ * @description :: A model that defines the data structure of client details
  * @docs    :: http://sailsjs.org/#!documentation/models
  */
 

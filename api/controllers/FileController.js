@@ -71,7 +71,7 @@ module.exports = {
     var blobAdapter = GFS.getSkipper();
 
     req.file('file')
-      .upload(blobAdapter.receive(), function whenDone(err, uploadedFiles) {
+      .upload(blobAdapter.receive(), (err, uploadedFiles)=> {
         if (err) return res.negotiate(err);
         else return res.ok({
           files: uploadedFiles,

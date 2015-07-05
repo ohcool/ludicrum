@@ -52,5 +52,12 @@ module.exports.policies = {
 
   InfoController: {
     'index': 'oauthBearer'
-  }
+  },
+  MediaController: 'oauthBearer',
+  CategoryController: 'oauthBearer',
+  ClientController: 'oauthBearer',
+  CommentController: 'oauthBearer',
+  FileController: 'oauthBearer',
+  InfoController: 'oauthBearer'
+
 };

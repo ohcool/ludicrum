@@ -1,7 +1,7 @@
 /**
  * Category.js
  *
- * @description :: TODO: You might write a short summary of how this model works and what it represents here.
+ * @description :: Model that defines the data structure of a category
  * @docs        :: http://sailsjs.org/#!documentation/models
  */
 

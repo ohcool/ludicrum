@@ -1,8 +1,8 @@
 /**
  * AccessToken
  *
- * @module      :: Model
- * @description :: A short summary of how this model works and what it represents.
+ * @module      :: AccessToken Model
+ * @description :: Defines the data structure how access tokens are stored using configured connection.
  * @docs    :: http://sailsjs.org/#!documentation/models
  */
 

@@ -1,8 +1,7 @@
 /**
  * RefreshToken
  *
- * @module      :: Model
- * @description :: A short summary of how this model works and what it represents.
+ * @description :: A model for persisting refresh tokens generated when an access token was generated
  * @docs    :: http://sailsjs.org/#!documentation/models
  */
 
