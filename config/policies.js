@@ -58,6 +58,7 @@ module.exports.policies = {
   ClientController: 'oauthBearer',
   CommentController: 'oauthBearer',
   FileController: 'oauthBearer',
-  InfoController: 'oauthBearer'
+  CommentLikeController: 'oauthBearer',
+  MediaLikeController: 'oauthBearer'
 
 };
