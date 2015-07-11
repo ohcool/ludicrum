@@ -3,5 +3,6 @@ module.exports = {
   port: 1337,
   oauth: {
     tokenLife: 3600
-  }
+  },
+  hookTimeout: 120000
 };

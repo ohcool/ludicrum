@@ -112,7 +112,7 @@ server.exchange(oauth2orize.exchange.password(function (client, username, passwo
     if (!pwdCompare) {
       return done(null, false);
     }
-    ;
+
 
     // Remove Refresh and Access tokens and create new ones
     RefreshToken.destroy({userId: user.id, clientId: client.clientId}, function (err) {
@@ -204,6 +204,16 @@ module.exports = {
       // Initialize passport
       app.use(passport.initialize());
       app.use(passport.session());
+
+      app.use(function (req, res, next) {
+        "use strict";
+        if (sails.config.cors.allRoutes) {
+          res.set({
+            'Access-Control-Allow-Origin': sails.config.cors.origin
+          });
+        }
+        next();
+      });
 
       /***** OAuth authorize endPoints *****/
 

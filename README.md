@@ -4,6 +4,12 @@
 
 # ludicrum-api
 
-a [Sails](http://sailsjs.org) application
+Ludicrum is a next generation media portal being built with javascript end-to-end (with love :))
+
+
+The features include,
+
+
+
 
 Documentation pending
