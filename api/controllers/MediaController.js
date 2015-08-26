@@ -44,15 +44,26 @@ module.exports = {
       fileId = req('file'),
       status = req('status');
 
-    Media.findOne(mediaId).exec((err, media) => {
-      if (err) return res.badRequest(err);
-      if (!media) return res.notFound('Media not found.');
-      media.file = fileId;
-      media.save((err1, mediaUpdated) => {
-        if (err1) return res.serverError(err1);
-        res.json(mediaUpdated);
+    Media.findOne(mediaId)
+      .exec((err, media) => {
+        if (err) return res.badRequest(err);
+        if (!media) return res.notFound('Media not found.');
+        media.file = fileId;
+
+        //grab publisher
+        var publisher = sails.hooks.publisher;
+
+        //publish thumbnailing work
+        var job = publisher.create('thumbnailer', {
+          mediaId: mediaId, fileId: fileId
+        }).save();
+
+
+        media.save((err1, mediaUpdated) => {
+          if (err1) return res.serverError(err1);
+          res.json(mediaUpdated);
+        });
       });
-    });
 
   }
 
