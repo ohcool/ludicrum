@@ -7,6 +7,7 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
+import path from 'path';
 
 module.exports = {
 
@@ -20,6 +21,17 @@ module.exports = {
       },
         stream => stream.pipe(res),
         err=> res.notFound(err));
+  },
+
+  isThumbnailReady: function (req, res) {
+    "use strict";
+    var filename = req.param('filename');
+    var readOptions = {filename: path.basename(filename, path.extname(filename) + '.png')};
+    Files.findOne(readOptions)
+      .then((file, err)=> {
+        res.ok({ready: file != undefined, thumb: file && file.filename});
+      });
+
   },
 
   stream: function (req, res) {

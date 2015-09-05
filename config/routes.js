@@ -72,6 +72,11 @@ module.exports.routes = {
     action: 'download'
   },
 
+  'get /file/thumbstatus/:filename': {
+    controller: 'FileController',
+    action: 'isThumbnailReady'
+  },
+
   'get /file/stream/:filename': {
     controller: 'FileController',
     action: 'stream'
