@@ -1,28 +1,25 @@
 /**
  * Thumbnail.js
  *
- * @description :: A model definition of mapping between thumbnail files and media object
+ * @description :: A model definition of mapping between thumbnail and file objects
  * @docs        :: http://sailsjs.org/#!documentation/models
  */
 
 module.exports = {
 
   attributes: {
-    user: {
-      model: 'User',
-      required: true
-    },
-    media: {
-      model: 'Media',
+    file: {
+      type: 'string',
       required: true
     },
     thumbnail: {
-      model: 'File',
+      type: 'string',
       required: true
     },
     size: {
       type: 'string',
-      required: true
+      required: true,
+      defaultsTo: "default"
     }
   }
 };

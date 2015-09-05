@@ -9,8 +9,10 @@
 module.exports = {
   create: function (req, res) {
     "use strict";
-    var media = req.param;
+    var media = req.body;
     media.status = 'draft';
+
+    media.createdBy = media.updatedBy = req.user.id;
 
     Media.create(media)
       .then((media, err) => {
@@ -19,13 +21,13 @@ module.exports = {
           return;
         }
 
-        res.json(media);
+        res.ok(media);
 
       });
   },
   update: function (req, res) {
     "use strict";
-    var media = req.param;
+    var media = req.body;
 
     Media.update({id: media.id}, media)
       .exec((err, mediaUpdated) => {
@@ -34,15 +36,14 @@ module.exports = {
           return;
         }
 
-        res.json(mediaUpdated);
+        res.ok(mediaUpdated);
 
       });
   },
   attachFile: function (req, res) {
     "use strict";
     var mediaId = req.param('media'),
-      fileId = req('file'),
-      status = req('status');
+      fileId = req('file');
 
     Media.findOne(mediaId)
       .exec((err, media) => {
@@ -50,18 +51,9 @@ module.exports = {
         if (!media) return res.notFound('Media not found.');
         media.file = fileId;
 
-        //grab publisher
-        var publisher = sails.hooks.publisher;
-
-        //publish thumbnailing work
-        var job = publisher.create('thumbnailer', {
-          mediaId: mediaId, fileId: fileId
-        }).save();
-
-
         media.save((err1, mediaUpdated) => {
           if (err1) return res.serverError(err1);
-          res.json(mediaUpdated);
+          res.ok(mediaUpdated);
         });
       });
 

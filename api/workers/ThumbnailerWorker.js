@@ -6,40 +6,48 @@
  * @type {Object}
  */
 
-import async from 'async';
-import Thumbbot from 'Thumbbot';
-import  fs from 'fs';
+import ffmpeg from 'fluent-ffmpeg';
+import fs from 'fs';
+import path from 'path';
+import mkpath from 'mkpath';
 
 export default {
   //specify worker
   //job concurrency
   concurrency: 2,
-
-  //perform sending email
-  //job
+  //perform thumbnailing job
   perform: function (job, done, context) {
-    let mediaId = job.data.mediaId;
+    let fileName = job.data.fileName;
+    let retryCounter = job.data.retryCounter || 0;
+
+    let _vPath = '';
+    let _tPath = '';
 
     async.waterfall(
       [
         function (next) {
 
-          Media.findOne(mediaId)
-            .exec((err, media) => {
-              if (err) next(err);
+          /*Media.findOne(mediaId)
+           .exec((err, media) => {
+           if (err) next(err);
 
-              File.findOne({filename: media.file})
-                .exec(next);
-            });
+           File.findOne({filename: media.file})
+           .exec(next);
+           });*/
+
+          let dir = path.join(process.cwd(), '/tmp/thumnails/');
+
+          mkpath(dir, err=> next(err, dir));
+
 
         },
         //saves the media file to temp directory
-        function (file, next) {
+        function (dir, next) {
           GFS.createReadStream({
-              filename: file.filename
+              filename: fileName
             },
               stream => {
-              var videoFilePath = './tmp/thumnails/' + file.filename;
+                var videoFilePath = path.join(dir, fileName);
               var writeStream = fs.createWriteStream(videoFilePath);
 
               // This pipes the POST data to the file
@@ -49,7 +57,7 @@ export default {
                 next(err);
               });
 
-              writeStream.on('end', function (err) {
+                stream.on('end', function (err) {
                 next(err, videoFilePath);
               });
 
@@ -58,31 +66,54 @@ export default {
 
         },
         //creates thumnails for the saved video files
-        function (videofilePath, next) {
-          var video = new Thumbbot('video.mp4');
-          video.seek('00:01');
+        function (videoFilePath, next) {
+          try {
+            _vPath = videoFilePath;
 
-          var thumbnail = yield video.save();
-          if (!thumbnail) {
-            //TODO: save media-thumbnail mapping info
+
+            let thumbDirName = path.dirname(videoFilePath);
+            let thumbFileName = path.basename(videoFilePath, path.extname(videoFilePath)) + '.png';
+            let thumbFilePath = path.join(thumbDirName, thumbFileName);
+
+            _tPath = thumbFilePath;
+
+            ffmpeg(videoFilePath)
+              .on('error', next)
+              .on('end', (result, command) => {
+
+                GFS.saveFile({fd: thumbFileName}, thumbFilePath, uploadedFile=> {
+                  next(null, uploadedFile);
+                }, next);
+
+
+              })
+              .screenshots({
+                // Will take screens at 20%, 40%, 60% and 80% of the video
+                count: 1,
+                filename: thumbFileName,
+                folder: thumbDirName
+              });
+
+
+          } catch (err) {
+            next(err);
           }
-
         },
         //does cleanup
-        function (videoFilePath, next) {
-          //TODO: delete the created video file
+        function (thumnailFile, next) {
+          [_tPath, _vPath].forEach(filePath=> {
+            try {
+              fs.unlink(filePath);
+            } catch (e) {
+            }
+          });
+
+          Thumbnail.create({file: fileName, thumbnail: thumnailFile.filename})
+            .exec(next);
         }],
       (err, result)=> {
-
-
+        done(err, result);
       });
-
-    var image = new Thumbbot('image.png');
-
-    //send email
-
-    //update sails model
-    done(null, "OK");
   }
 
 };

@@ -75,10 +75,15 @@ module.exports = {
     req.file('file')
       .upload(blobAdapter.receive(), (err, uploadedFiles)=> {
         if (err) return res.negotiate(err);
-        else return res.ok({
-          files: uploadedFiles,
-          textParams: req.params.all()
-        });
+        else {
+          var uploadedFile = uploadedFiles[0];
+
+          Thumbnailer.queue(uploadedFile.fd);
+          return res.ok({
+            files: uploadedFiles,
+            textParams: req.params.all()
+          });
+        }
       });
 
     /*req.file('file').upload({
