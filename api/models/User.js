@@ -1,8 +1,7 @@
 /**
  * User
  *
- * @module      :: Model
- * @description :: A short summary of how this model works and what it represents.
+ * @description :: A model for persisting user entity information.
  * @docs    :: http://sailsjs.org/#!documentation/models
  */
 

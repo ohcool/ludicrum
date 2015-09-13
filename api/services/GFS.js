@@ -2,7 +2,10 @@
  * Created by Srinath Janankiraman on 5/31/15.
  */
 
-var _blobAdapter, _gfs, Grid = require('gridfs-stream');
+var _blobAdapter, _gfs,
+  Grid = require('gridfs-stream'),
+  fs = require('fs'),
+  path = require('path');
 
 var getFS = function (callback) {
   "use strict";
@@ -36,6 +39,44 @@ exports.getSkipper = function () {
 
 exports.getFS = getFS;
 
+exports.saveFile = function (options, filePath, callback, errCallback) {
+
+
+  if (!options) {
+    options = {};
+  }
+  if (!options.root) {
+    options.root = sails.config.fileRepositories.gridfs.root;
+  }
+
+  getFS((err, gfs)=> {
+
+    let readableStream = fs.createReadStream(filePath)
+
+    "use strict";
+    var outs = gfs.createWriteStream({
+      filename: options.fd,
+      root: options.root,
+      metadata: {
+        fd: options.fd,
+        dirname: path.dirname(options.fd)
+      }
+    });
+    readableStream.once('error', errCallback);
+    outs.once('error', errCallback);
+    outs.once('open', function openedWriteStream() {
+      // console.log('opened output stream for',readableStream.fd);
+      readableStream.extra = _.assign({fileId: this.id}, this.options.metadata);
+    });
+    outs.once('close', function doneWritingFile(file) {
+      // console.log('closed output stream for',readableStream.fd);
+      callback(file);
+
+    });
+    readableStream.pipe(outs);
+  });
+};
+
 exports.createReadStream = function (options, callback, errCallback) {
   "use strict";
 
@@ -46,7 +87,7 @@ exports.createReadStream = function (options, callback, errCallback) {
     options.root = sails.config.fileRepositories.gridfs.root;
   }
 
-  getFS((err, fs)=> {
+  getFS((err, fs, db)=> {
 
     if (err) {
       errCallback(err);

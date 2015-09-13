@@ -9,29 +9,12 @@
  * @api private
  */
 
-exports.uid = function (len) {
-  var buf = []
-    , chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-    , charlen = chars.length;
 
-  for (var i = 0; i < len; ++i) {
-    buf.push(chars[getRandomInt(0, charlen - 1)]);
-  }
+let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+let charlen = chars.length;
 
-  return buf.join('');
-};
-
-exports.uidLight = function (len) {
-  var buf = []
-    , chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-    , charlen = chars.length;
-
-  for (var i = 0; i < len; ++i) {
-    buf.push(chars[getRandomInt(0, charlen - 1)]);
-  }
-
-  return buf.join('');
-};
+let lite_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+  lite_charlen = chars.length;
 
 /**
  * Return a random int, used by `utils.uid()`
@@ -45,3 +28,27 @@ exports.uidLight = function (len) {
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+exports.uid = function (len) {
+  let buf = [];
+
+
+  for (var i = 0; i < len; ++i) {
+    buf.push(chars[getRandomInt(0, charlen - 1)]);
+  }
+
+  return buf.join('');
+};
+
+exports.uidLight = function (len) {
+  let buf = [];
+
+
+  for (var i = 0; i < len; ++i) {
+    buf.push(lite_chars[getRandomInt(0, lite_charlen - 1)]);
+  }
+
+  return buf.join('');
+};
+
+

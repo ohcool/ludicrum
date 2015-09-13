@@ -1,7 +1,8 @@
 /**
  * Media.js
  *
- * @description :: TODO: You might write a short summary of how this model works and what it represents here.
+ * @description :: Model for persisting extra Media information like category it falls under, description,
+ * actual file stored in "Files" collection, who created it, who updated it, comments made, likes etc
  * @docs        :: http://sailsjs.org/#!documentation/models
  */
 
@@ -14,6 +15,11 @@ module.exports = {
     type: {
       type: 'string',
       defaultsTo: 'video'
+    },
+    mediaId: {
+      type: 'string',
+      required: true,
+      unique: true
     },
     status: {
       type: 'string',

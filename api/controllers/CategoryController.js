@@ -1,3 +1,4 @@
+/* global Category */
 /**
  * CategoryController
  *
@@ -6,9 +7,9 @@
  */
 
 module.exports = {
-  ByName: (req, res)=> {
+  ByName: function (req, res) {
     Category.findOneByName(req.params.name)
-      .then((category, err)=> {
+      .then((category, err) => {
         if (err) {
           return res.serverError(err);
         } else {
@@ -16,7 +17,7 @@ module.exports = {
         }
       });
   },
-  ByParent: (req, res) => {
+  ByParent: function (req, res) {
     Category.find({
       parent: req.params.id == 'null' ? null : req.params.id
     }).then((categories, err) => {
@@ -27,10 +28,10 @@ module.exports = {
       }
     });
   },
-  GetChildren: (req, res)=> {
+  GetChildren: function (req, res) {
     Category.find({
       parent: req.param('id')
-    }).then((categories, err)=> {
+    }).then((categories, err) => {
       if (err) {
         return res.serverError(err);
       } else {
@@ -38,7 +39,7 @@ module.exports = {
       }
     });
   },
-  GetChildrenByName: (req, res) => {
+  GetChildrenByName: function (req, res) {
     Category.find({
       name: req.param('name')
     }).then((categories, err) => {

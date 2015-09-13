@@ -4,6 +4,20 @@
 
 # ludicrum-api
 
-a [Sails](http://sailsjs.org) application
+Ludicrum is a next generation media portal being built with javascript end-to-end (with love :))
+
+Perquisites:
+ffmpeg(used to create thumbnails)
+to install
+sudo add-apt-repository ppa:kirillshkrogalev/ffmpeg-next
+sudo apt-get update
+sudo apt-get install ffmpeg
+refer http://www.noobslab.com/2014/12/ffmpeg-returns-to-ubuntu-1410.html
+
+
+The features include,
+
+
+
 
 Documentation pending

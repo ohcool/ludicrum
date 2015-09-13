@@ -1,7 +1,7 @@
 /**
  * CommentLike.js
  *
- * @description :: TODO: You might write a short summary of how this model works and what it represents here.
+ * @description :: A model that defines the data structure of a like for a comment.
  * @docs        :: http://sailsjs.org/#!documentation/models
  */
 
