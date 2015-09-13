@@ -16,6 +16,11 @@ module.exports = {
       type: 'string',
       defaultsTo: 'video'
     },
+    mediaId: {
+      type: 'string',
+      required: true,
+      unique: true
+    },
     status: {
       type: 'string',
       enum: ['draft', 'published', 'unpublished', 'deleted'],

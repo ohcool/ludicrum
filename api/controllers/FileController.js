@@ -9,6 +9,49 @@
 
 import path from 'path';
 
+let streamFile = function (readOptions, req, res) {
+  "use strict";
+
+  //Retrieve file metadata information and then serve the file
+  Files.findOne(readOptions)
+    .then((file, err)=> {
+
+      if (!file || err) {
+        res.notFound("The file doesn't exist!!!");
+        return;
+      }
+
+      if (req.headers['range']) {
+
+        // Range request, partialle stream the file
+        //console.log('Range Reuqest');
+        let parts = req.headers['range'].replace(/bytes=/, "").split("-");
+        let partialstart = parts[0];
+        let partialend = parts[1];
+
+        let start = parseInt(partialstart, 10);
+        let end = partialend ? parseInt(partialend, 10) : file.length - 1;
+        let chunksize = (end - start) + 1;
+
+        console.log('Range ', start, '-', end);
+
+        res.writeHead(206, {
+          'Content-Range': 'bytes ' + start + '-' + end + '/' + file.length,
+          'Accept-Ranges': 'bytes',
+          'Content-Length': chunksize,
+          'Content-Type': file.contentType
+        });
+
+        readOptions.range = {
+          startPos: start,
+          endPos: end
+        };
+      }
+
+      GFS.createReadStream(readOptions, stream => stream.pipe(res), err=> res.notFound(err));
+    });
+}
+
 module.exports = {
 
   download: function (req, res) {
@@ -34,49 +77,28 @@ module.exports = {
 
   },
 
+  streamMedia: function (req, res) {
+    "use strict";
+
+    var mediaId = req.param('mediaId');
+
+    Media.findOne({mediaId: mediaId})
+      .then((media, err)=> {
+
+        if (err) {
+          return res.notFound("Media not found!");
+        }
+
+        streamFile({filename: media.file}, req, res);
+
+      });
+  },
+
   stream: function (req, res) {
     "use strict";
-    var filename = req.param('filename');
-    var readOptions = {filename: filename};
+    let filename = req.param('filename');
 
-    //Retrieve file metadata information and then serve the file
-    Files.findOne(readOptions)
-      .then((file, err)=> {
-
-        if (!file || err) {
-          res.notFound("The file doesn't exist!!!");
-          return;
-        }
-
-        if (req.headers['range']) {
-
-          // Range request, partialle stream the file
-          //console.log('Range Reuqest');
-          var parts = req.headers['range'].replace(/bytes=/, "").split("-");
-          var partialstart = parts[0];
-          var partialend = parts[1];
-
-          var start = parseInt(partialstart, 10);
-          var end = partialend ? parseInt(partialend, 10) : file.length - 1;
-          var chunksize = (end - start) + 1;
-
-          console.log('Range ', start, '-', end);
-
-          res.writeHead(206, {
-            'Content-Range': 'bytes ' + start + '-' + end + '/' + file.length,
-            'Accept-Ranges': 'bytes',
-            'Content-Length': chunksize,
-            'Content-Type': file.contentType
-          });
-
-          readOptions.range = {
-            startPos: start,
-            endPos: end
-          };
-        }
-
-        GFS.createReadStream(readOptions, stream => stream.pipe(res), err=> res.notFound(err));
-      });
+    streamFile({filename: filename}, req, res);
   },
 
   upload: function (req, res) {

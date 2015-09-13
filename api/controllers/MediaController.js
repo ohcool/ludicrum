@@ -13,6 +13,7 @@ module.exports = {
     media.status = 'draft';
 
     media.createdBy = media.updatedBy = req.user.id;
+    media.mediaId = UtilsService.uidLight(10);
 
     Media.create(media)
       .then((media, err) => {
@@ -24,6 +25,19 @@ module.exports = {
         res.ok(media);
 
       });
+  },
+  getByMediaId: function (req, res) {
+    "use strict";
+
+    Media.findOne({mediaId: req.param('mediaId')})
+      .then((media, err) => {
+        if (err) {
+          res.badRequest(err);
+          return;
+        }
+        res.ok(media);
+      });
+
   },
   update: function (req, res) {
     "use strict";
