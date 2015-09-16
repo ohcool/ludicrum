@@ -9,7 +9,7 @@
  * http://sailsjs.org/#/documentation/reference/sails.config/sails.config.bootstrap.html
  */
 
-module.exports.bootstrap = function(cb) {
+module.exports.bootstrap = function (cb) {
 
   // It's very important to trigger this callback method when you are finished
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
@@ -21,6 +21,10 @@ module.exports.bootstrap = function(cb) {
         email: 'me@gmail.com',
         password: 'password'
       }).exec(function (err, user) {
+        if (err) {
+          console.log("Default user creation failed with following error message:");
+          console.log(err.message);
+        }
         console.log("Default user created");
         console.log("- username: " + user.email);
         console.log("- password: password");
