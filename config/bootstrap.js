@@ -23,7 +23,7 @@ module.exports.bootstrap = function (cb) {
       }).exec(function (err, user) {
         if (err) {
           console.log("Default user creation failed with following error message:");
-          econsole.log(err.message);
+          console.log(err.message);
         }
         console.log("Default user created");
         console.log("- username: " + user.email);
