@@ -34,10 +34,10 @@ module.exports.connections = {
 
   development: {
     adapter: "sails-orientdb",
-    host: 'localhost',
-    port: 2424,
-    user: 'dev',
-    password: 'pass@word88',
+    host: process.env.DB_HOST || 'localhost',
+    port: process.env.DB_PORT || 2424,
+    user: process.env.DB_USER || 'dev',
+    password: process.env.DB_PASS || 'pass@word88',
     database: 'ludicrum',
     // Additional options
     options: {
