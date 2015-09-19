@@ -7,11 +7,12 @@
 Ludicrum is a next generation media portal being built with javascript end-to-end (with love :))
 
 Perquisites:
-java(need by orientdb)
- to install
+java(needed by orientdb) to install
+
   sudo apt-get install default-jre
-redis(used for task queing while generating thumbnails)
-  to install
+  
+redis(used for task queing while generating thumbnails) to install
+
     create file /etc/apt/sources.list.d/dotdeb.org.list and fill it with the following content.
 
     # /etc/apt/sources.list.d/dotdeb.org.list
@@ -27,12 +28,15 @@ redis(used for task queing while generating thumbnails)
     sudo apt-get update
     sudo apt-get install redis-server
 
-ffmpeg(used to create thumbnails)
- to install
+ffmpeg(used to create thumbnails) to install
+
+  # install latest ffmpeg
+
   sudo add-apt-repository ppa:kirillshkrogalev/ffmpeg-next
   sudo apt-get update
   sudo apt-get install ffmpeg
-  refer http://www.noobslab.com/2014/12/ffmpeg-returns-to-ubuntu-1410.html
+  
+  # refer http://www.noobslab.com/2014/12/ffmpeg-returns-to-ubuntu-1410.html
 
 
 The features include,
