@@ -92,5 +92,15 @@ module.exports.routes = {
   'get /file/stream/:filename': {
     controller: 'FileController',
     action: 'stream'
+  },
+  //emotion endpoints
+  'get /emotion/like/:contentId/:like': {
+    controller: 'EmotionController',
+    action: 'setLike'
+  },
+  //comments endpoints
+  'get /comment/for/:contentId/skip/:skip/take/:take': {
+    controller: 'CommentController',
+    action: 'getCommentsByContentId'
   }
 };

@@ -41,7 +41,7 @@
     "sails-hook-publisher": "^0.1.2",
     "sails-hook-subscriber": "^0.1.5",
     "sails-mongo": "^0.11.2",
-    "sails-orientdb": "^0.10.50",
+    "sails-orientdb": "appscot/sails-orientdb",
     "sails-skipper-orientdb": "git+https://github.com/vjsrinath/sails-skipper-orientdb.git",
     "skipper-gridfs": "^0.5.3"
   },

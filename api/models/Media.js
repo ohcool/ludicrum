@@ -47,14 +47,6 @@ module.exports = {
       model: 'User',
       required: false,
       defaultsTo: ""
-    },
-    likes: {
-      collection: 'MediaLike',
-      via: 'media'
-    },
-    comments: {
-      collection: 'Comment',
-      via: 'media'
     }
   }
 };
