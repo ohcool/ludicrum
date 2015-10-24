@@ -8,18 +8,6 @@
 
 module.exports = {
   attributes: {
-    user: {
-      model: 'User',
-      required: true
-    },
-    media: {
-      model: 'Media',
-      required: true
-    },
-    likes: {
-      collection: 'CommentLike',
-      via: 'comment'
-    },
     content: {
       type: 'text',
       required: true

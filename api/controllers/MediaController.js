@@ -28,14 +28,24 @@ module.exports = {
   },
   getByMediaId: function (req, res) {
     "use strict";
+    let mediaId = req.param('mediaId');
 
-    Media.findOne({mediaId: req.param('mediaId')})
+    Media.findOne({mediaId: mediaId})
       .then((media, err) => {
         if (err) {
           res.badRequest(err);
           return;
         }
-        res.ok(media);
+
+
+        Media.query(`select expand(in('likes').email) from Media where mediaId = '${mediaId}'`)
+          .then((emails, err)=> {
+            media.likes = emails.length;
+            media.liked = _.find(emails, (email)=> email.value == req.user.email) != undefined;
+            res.ok(media);
+          });
+
+
       });
 
   },

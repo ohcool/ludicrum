@@ -76,6 +76,50 @@ module.exports.connections = {
     }
   },
 
+  test: {
+    adapter: "sails-orientdb",
+    host: process.env.DB_HOST || 'localhost',
+    port: process.env.DB_PORT || 2424,
+    user: process.env.DB_USER || 'dev',
+    password: process.env.DB_PASS || 'pass@word88',
+    database: 'ludicrumtests',
+    // Additional options
+    options: {
+
+      // DB/Oriento Options
+      //
+      // database type: graph | document
+      databaseType: 'graph',
+      //
+      // storage type: memory | plocal
+      storage: 'plocal',
+
+      // Useful in REST APIs
+      //
+      // If `id` is URI encoded, decode it with `decodeURIComponent()` (useful when `id` comes from an URL)
+      decodeURIComponent: true,
+      //
+      // Replaces circular references with `id` after populate operations (useful when results will be JSONfied)
+      removeCircularReferences: false,
+
+      // migrations
+      //
+      // Drop tables without deleting edges/vertexes hence not ensuring graph consistency
+      // Will speed up drop operations. Only works with migration: 'alter' or 'drop'
+      unsafeDrop: false,
+
+      // other
+      //
+      // Turn parameterized queries on
+      parameterized: true,
+
+      //
+      // Waterline only allows populating 1 level below. fetchPlanLevel allows to
+      // to populate further levels below (experimental)
+      fetchPlanLevel: 1
+    }
+  },
+
   /***************************************************************************
   *                                                                          *
   * MySQL is the world's most popular relational database.                   *
