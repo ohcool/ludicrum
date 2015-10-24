@@ -16,6 +16,8 @@ module.exports.bootstrap = function (cb) {
 
   "strict mode"
 
+  console.log("starting ludicrum portal");
+
   var checkIfUserHasProfile = (userId, callback)=> {
     "use strict";
     let query = `select count(@rid) from user where @rid='${userId}' and outE('ownsProfile').size() > 0 limit 1`;
@@ -49,6 +51,7 @@ module.exports.bootstrap = function (cb) {
       "use strict";
       if (exists) {
         console.log(`A profile is already exists for user: ${user.email}`);
+        return callback && callback(exists, err);
       } else {
         createProfile(user, (profile, err)=> {
           if (err) {
@@ -56,16 +59,80 @@ module.exports.bootstrap = function (cb) {
             return;
           }
           console.log(`A default profile has been created for user: ${user.email}`);
-          callback && callback(profile, err);
+          callback && callback(true, err);
         });
       }
     });
   }
 
+  var createNamedClient = (name, redirectURI)=> {
+    "use strict";
+
+    return new Promise((resolve, reject)=> {
+      // Create a trusted application
+      Client.findOne({'name': name}, function (err, client) {
+        if (err) {
+          console.log(err.message);
+          return reject(err);
+        }
+        if (client) {
+          console.log(`${name} already exists`);
+          console.log("- client_id: " + client.clientId);
+          console.log("- client_secret: " + client.clientSecret);
+          console.log("- redirectURI: " + client.redirectURI);
+          resolve(client);
+        } else {
+          Client.create({
+            name: name,
+            redirectURI: redirectURI,
+            trusted: true
+          }).exec(function (err, client) {
+            if (err) {
+              console.log(err.message);
+              return reject(err);
+            }
+            console.log(`${name} created`);
+            console.log("- client_id: " + client.clientId);
+            console.log("- client_secret: " + client.clientSecret);
+            console.log("- redirectURI: " + client.redirectURI);
+            resolve(client);
+          });
+        }
+
+      })
+    });
+
+  };
+
+  var createClients = ()=> {
+    "use strict";
+    return Promise.all([
+
+      // Create a trusted application
+      createNamedClient('trustedTestClient', 'http://localhost:1338'),
+
+      // Create an untrusted application
+      createNamedClient('untrustedTestClient', 'http://localhost:1339')
+    ]);
+
+
+  };
+
+
+  console.log("checking for default user...");
+
+  var onUserCheckComplete = ()=> {
+    "use strict";
+    createClients().then(()=> cb());
+  };
 
   // Create a user
   User.findOne({email: 'me@gmail.com'}, function (err, user) {
+    if (err) {
+      console.error(err);
+    }
     if (!user) {
+      console.log("default user is not found...");
       User.create({
         email: 'me@gmail.com',
         password: 'password'
@@ -78,75 +145,18 @@ module.exports.bootstrap = function (cb) {
         console.log("- username: " + user.email);
         console.log("- password: password");
 
-        checkAndCreateProfile(user);
+        checkAndCreateProfile(user, ()=> onUserCheckComplete());
 
       });
     } else {
 
-      checkAndCreateProfile(user);
-
       console.log('Default user already exists');
       console.log("- username: " + user.email);
       console.log("- password: password");
+
+      checkAndCreateProfile(user, ()=> onUserCheckComplete());
     }
   });
 
-  // Create a trusted application
-  Client.findOne({'name': 'trustedTestClient'}, function (err, client) {
-    if (err) {
-      console.log(err.message);
-    } else {
-      if (!client) {
-        Client.create({
-          name: 'trustedTestClient',
-          redirectURI: 'http://localhost:1338',
-          trusted: true
-        }).exec(function (err, client) {
-          if (err) {
-            console.log(err.message);
-          } else {
-            console.log("trustedTestClient created");
-            console.log("- client_id: " + client.clientId);
-            console.log("- client_secret: " + client.clientSecret);
-            console.log("- redirectURI: " + client.redirectURI);
-          }
-        });
-      } else {
-        console.log('trustedTestClient already exists');
-        console.log("- client_id: " + client.clientId);
-        console.log("- client_secret: " + client.clientSecret);
-        console.log("- redirectURI: " + client.redirectURI);
-      }
-    }
-  });
 
-  // Create an untrusted application
-  Client.findOne({'name': 'untrustedTestClient'}, function (err, client) {
-    if (err) {
-      console.log(err.message);
-    } else {
-      if (!client) {
-        Client.create({
-          name: 'untrustedTestClient',
-          redirectURI: 'http://localhost:1339'
-        }).exec(function (err, client) {
-          if (err) {
-            console.log(err.message);
-          } else {
-            console.log("untrustedTestClient created");
-            console.log("- client_id: " + client.clientId);
-            console.log("- client_secret: " + client.clientSecret);
-            console.log("- redirectURI: " + client.redirectURI);
-          }
-        });
-      } else {
-        console.log('untrustedTestClient already exists');
-        console.log("- client_id: " + client.clientId);
-        console.log("- client_secret: " + client.clientSecret);
-        console.log("- redirectURI: " + client.redirectURI);
-      }
-    }
-  });
-
-  cb();
 };
