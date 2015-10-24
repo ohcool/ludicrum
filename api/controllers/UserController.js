@@ -6,24 +6,5 @@
  */
 
 module.exports = {
-  setMediaLike: function () {
-    "use strict";
-
-    let mediaID = req.param('filename');
-
-    User.findById(req.user.id)
-      .then((user, err)=> {
-        if (err) {
-          res.badRequest(err);
-          return;
-        }
-
-
-      });
-  },
-  setCommentLike: function () {
-    "use strict";
-
-  }
 };
 

@@ -102,5 +102,15 @@ module.exports.routes = {
   'get /comment/for/:contentId/skip/:skip/take/:take': {
     controller: 'CommentController',
     action: 'getCommentsByContentId'
+  },
+
+  //profiles endpoint
+  'get /profile/list/byuser/:userId': {
+    controller: 'ProfileController',
+    action: 'getProfilesByUser'
+  },
+  'get /profile/:userId/picture': {
+    controller: 'ProfileController',
+    action: 'getProfileImage'
   }
 };
